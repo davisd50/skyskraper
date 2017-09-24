@@ -22,7 +22,6 @@ setup(name='skyskraper',
         'Intended Audience :: Developers',
         'License :: Other/Proprietary License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
       ],
@@ -38,11 +37,17 @@ setup(name='skyskraper',
       install_requires=[
           'setuptools',
           'zope.interface',
-          'zope.location',
+          'zope.schema',
           'sqlalchemy',
-          'sparc.config'
+          'sparc.config',
+          'sparc.filter',
+          'selenium',
+          'beautifulsoup4'
       ],
       extras_require={
             'testing': tests_require,
       },
+      entry_points={
+          'console_scripts':['skyskraper=skyskraper.app:main'],
+          },
       )
