@@ -33,11 +33,12 @@ class SGSessionFromBSDivSpec(object):
         
     def _text(self, bs_string):
         """Return a html special chars converted string"""
-        return u"{}".format(list(BeautifulSoup(bs_string, 'html.parser').stripped_strings)[0])
+        t = u"{}".format(list(BeautifulSoup(bs_string, 'html.parser').stripped_strings)[0])
+        return u"{}".format(t.encode(encoding='ascii', errors='replace'))
     
     def _get_date_from_headerView(self, headerView):
         date_string = u"{}".format(headerView.find('div', class_='club').string)
-        m,d,y = date_string.split(sep=" ")
+        m,d,y = date_string.split()
         if len(d) < 2:
             d = '0'+d
         dt = datetime.datetime.strptime(u"{} {} {}".format(m,d,y), '%b %d %Y')
@@ -45,7 +46,7 @@ class SGSessionFromBSDivSpec(object):
     
     def _get_timedelta_from_headerView(self, headerView):
         duration = headerView.find('span', class_='session-duration')
-        splits = duration.text.split(" ")
+        splits = duration.text.split()
         for i, v in enumerate(splits):
             if v[-1] == 'h':
                 hours = int(v[:-1])

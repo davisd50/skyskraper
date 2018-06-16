@@ -2,9 +2,11 @@ import argparse
 import csv
 import logging
 from os import path
+import pdb
 import sys
 import tempfile
 import time
+import traceback
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common import exceptions as selenium_exc
@@ -79,6 +81,11 @@ def getScriptArgumentParser(args=sys.argv):
             action='store_true',
             help="Echo debug messages to stdout.")
     
+    # --pdb
+    parser.add_argument('--pdb', 
+            help="drop to Python debugger for uncaught exceptions",
+            action="store_true")
+    
     return parser
 
 class SkySkraper(object):
@@ -105,7 +112,8 @@ class SkySkraper(object):
         element_username.send_keys(self.config.mapping()['SkyGolf']['identity']['username'])
         element_password = self.client.find_element_by_id('f_password')
         element_password.send_keys(self.config.mapping()['SkyGolf']['identity']['password'])
-        element_login = self.client.find_element_by_id('btnLogin')
+        #element_login = self.client.find_element_by_id('btnLogin')
+        element_login = self.client.find_element_by_class_name('button')
         element_login.click()
         for i in range(self.timeout):
             time.sleep(1)
@@ -171,7 +179,15 @@ class SkySkraper(object):
 def main():
     args = getScriptArgumentParser().parse_args()
     app = SkySkraper(get_runtime_config(args))
-    app.go() 
+    try:
+        app.go()
+    except Exception:
+        if args.pdb:
+            type, value, tb = sys.exc_info()
+            traceback.print_exc()
+            pdb.post_mortem(tb)
+        else:
+            raise
 
 if __name__ == '__main__':
     main()
