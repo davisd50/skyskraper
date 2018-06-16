@@ -1,0 +1,15 @@
+SkySkraperFilter: &sg_shot_filter1
+ filter: (date < 2017-09-25 and ball_speed >= 76) or launch_angle < 20
+ conjunction: and
+ expressions:
+  - ISGSession.date < 2017-09-25
+  - ISGShot.ball_speed >= 76
+
+SkySkraperColumn:
+ name: your_column_name
+ - entry:
+    value: some_default_value
+    filter: *sg_shot_filter1
+ - entry:
+    value: some_other_value
+    filter: *sg_shot_filter2
