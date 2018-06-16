@@ -148,7 +148,7 @@ class SkySkraper(object):
                     writer = csv.DictWriter(handle,
                                             dialect=dialect,
                                             extrasaction='ignore',
-                                            fieldnames = ['id','date','club','duration',
+                                            fieldnames = ['id','date','club','duration', 'total_shots',
                                                           'sequence','ball_speed','club_speed',
                                                           'launch_angle','backspin','sidespin',
                                                           'carry_distance','total_distance',
